@@ -20,13 +20,7 @@ class TestStatistics(unittest.TestCase):
         )
 
 
-    def test_top_goals(self):
-        self.assertAlmostEqual(self.statistics.top(4, 2)[0].name, "Lemieux")
-
-
-    def test_top_assists(self):
-        self.assertAlmostEqual(self.statistics.top(4, 3)[0].name, "Gretzky")
-
+    
 
     def test_search_true_player(self):
         self.assertAlmostEqual(self.statistics.search("Yzerman").assists, 56)
@@ -39,6 +33,6 @@ class TestStatistics(unittest.TestCase):
         self.assertAlmostEqual(len(self.statistics.team("EDM")), 3)
 
     def test_top_points(self):
-        self.assertAlmostEqual(self.statistics.top(4, 1)[0].name, "Gretzky")
+        self.assertAlmostEqual(self.statistics.top(4)[0].name, "Gretzky")
 
     # ...
