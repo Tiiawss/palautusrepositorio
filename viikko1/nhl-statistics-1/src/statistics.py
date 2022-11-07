@@ -1,8 +1,10 @@
 from player_reader import PlayerReader
 from enum import Enum
 
+
 def sort_by_points(player):
-        return player.points
+    return player.points
+
 def sort_by_goals(player):
     return player.goals
 
@@ -14,16 +16,12 @@ class SortBy(Enum):
     POINTS = 1
     GOALS = 2
     ASSISTS = 3
-    
+
+
 class Statistics:
     def __init__(self, reader=PlayerReader):
-
         self._reader = reader
         self._players = self._reader.get_players()
-
-    
-
-    
 
     def search(self, name):
         for player in self._players:
@@ -36,7 +34,7 @@ class Statistics:
         players_of_team = filter(
             lambda player: player.team == team_name,
             self._players
-        )
+            )
 
         return list(players_of_team)
 
