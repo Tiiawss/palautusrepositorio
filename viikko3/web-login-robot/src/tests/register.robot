@@ -34,7 +34,31 @@ Register With Nonmatching Password And Password Confirmation
     Submit Credentials
     Register Should Fail With Message  Passwords not matching
 
+Login After Successful Registration
+    Register With Credentials  kalle  kalle123  kalle123
+    Register Should Succeed
+    Go To Login Page
+    Login Page Should Be Open
+    Login With Credentials  kalle  kalle123
+    Login Should Succeed
+
+Login After Failed Registration
+    Register With Credentials  kalle  k123  k123
+    Register Should Fail With Message  Password must be at least 8 characters long and contain more than letters
+    Go To Login Page
+    Login Page Should Be Open
+    Login With Credentials  kalle  k123
+    Login Should Fail With Message  Invalid username or password
+
 *** Keywords ***
+
+Register With Credentials
+    [Arguments]  ${username}  ${password}  ${password confirmation}
+    Set Username  ${username}
+    Set Password  ${password}
+    Set Password Confirmation  ${password confirmation}
+    Submit Credentials
+
 Register Should Succeed
     Welcome Page Should Be Open
 
