@@ -3,23 +3,36 @@ from sovelluslogiikka import Sovelluslogiikka
 from tkinter import ttk, constants, StringVar
 
 class Summa:
-    def laske(self, luku1, luku2):
-        return luku1 + luku2
+    def __init__(self, sovelluslogiikka, hae_luku):
+        self._sovellus = sovelluslogiikka
+        self._hae_luku = hae_luku
 
-class Tulo:
-    def laske(self, luku1, luku2):
-        return luku1 * luku2
+    def suorita(self):
+        self._sovellus.plus(int(self._hae_luku()))
 
 class Erotus:
-    def laske(self, luku1, luku2):
-        return luku1 - luku2
-class Nollaus:
-    def laske(self):
-        return 0
-class Kumoa:
-    def laske(self):
-        pass
+    def __init__(self, sovelluslogiikka, hae_luku):
+        self._sovellus = sovelluslogiikka
+        self._hae_luku = hae_luku
 
+    def suorita(self):
+        self._sovellus.miinus(int(self._hae_luku()))
+
+class Nollaus:
+    def __init__(self, sovelluslogiikka, hae_luku):
+        self._sovellus = sovelluslogiikka
+        self._hae_luku = hae_luku
+
+    def suorita(self):
+        self._sovellus.nollaa()
+
+class Kumoa:
+    def __init__(self, sovelluslogiikka, hae_luku):
+        self._sovellus = sovelluslogiikka
+        self._hae_luku = hae_luku
+
+    def suorita(self):
+        self._sovellus.aseta_arvo(int(self._hae_luku()))
 
 class Komento(Enum):
     SUMMA = 1
@@ -30,14 +43,15 @@ class Komento(Enum):
 
 class Kayttoliittyma:
     def __init__(self, sovelluslogiikka, root):
-        self._sovelluslogiikka = sovelluslogiikka
+        self._sovellus = sovelluslogiikka
         self._root = root
+        self._edellinen = 0
 
         self._komennot = {
             Komento.SUMMA: Summa(sovelluslogiikka, self._lue_syote),
             Komento.EROTUS: Erotus(sovelluslogiikka, self._lue_syote),
             Komento.NOLLAUS: Nollaus(sovelluslogiikka, self._lue_syote),
-            Komento.KUMOA: Kumoa(sovelluslogiikka, self._lue_syote)
+            Komento.KUMOA: Kumoa(sovelluslogiikka, self._anna_edellinen)
         }
 
     def kaynnista(self):
@@ -81,17 +95,21 @@ class Kayttoliittyma:
         self._kumoa_painike.grid(row=2, column=3)
 
     def _lue_syote(self):
+        self._edellinen= self._syote_kentta.get()
         return self._syote_kentta.get()
+
+    def _anna_edellinen(self):
+        return self._edellinen
 
     def _suorita_komento(self, komento):
         komento_olio = self._komennot[komento]
         komento_olio.suorita()
         self._kumoa_painike["state"] = constants.NORMAL
 
-        if self._sovelluslogiikka.tulos == 0:
+        if self._sovellus.tulos == 0:
             self._nollaus_painike["state"] = constants.DISABLED
         else:
             self._nollaus_painike["state"] = constants.NORMAL
 
         self._syote_kentta.delete(0, constants.END)
-        self._tulos_var.set(self._sovelluslogiikka.tulos)
+        self._tulos_var.set(self._sovellus.tulos)
